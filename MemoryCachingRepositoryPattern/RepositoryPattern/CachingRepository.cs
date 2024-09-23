@@ -109,8 +109,7 @@ namespace DataAccess.MemoryCaching.RepositoryPattern
             {
                 //IQueryable<T> query = _context.Set<T>().AsNoTracking();
                 entities =
-                    (await _context.Set<T>().AsNoTracking().ToListAsync(cancellationToken))
-                    .AsEnumerable();
+                    (await _context.Set<T>().AsNoTracking().ToListAsync(cancellationToken));
                 _cache.Set(cachekey, entities, _memoryCacheEntryOptions);
             }
             return entities;

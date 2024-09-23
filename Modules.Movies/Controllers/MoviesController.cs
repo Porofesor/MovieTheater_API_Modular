@@ -37,7 +37,7 @@ namespace Modules.Movies.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetAllAsync()
         {
-            var movies = _unitOfWork.MovieRepository.GetAll();
+            var movies = await _unitOfWork.MovieCachingRepository.CachedGetAllWithNoTrackingAsync();
             return Ok(movies);
         }
         [HttpPost]

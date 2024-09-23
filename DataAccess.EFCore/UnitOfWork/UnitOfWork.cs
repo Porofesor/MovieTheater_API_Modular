@@ -24,14 +24,14 @@ namespace DataAccess.EFCore.UnitOfWork
             Dispose(true);
             GC.SuppressFinalize(this);
         }
-        protected void Dispose(bool disposing)
+        protected virtual void Dispose(bool disposing)
         {
             if (!IsDisposed)
             {
                 if (disposing)
                 {
                     //release managed resources
-                    this.Dispose();// TODO ????
+                    _context.Dispose();// TODO ????
                 }
                 //release unmanaged resources
                 IsDisposed = true;
