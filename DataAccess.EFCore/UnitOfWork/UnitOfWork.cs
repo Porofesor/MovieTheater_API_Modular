@@ -31,6 +31,7 @@ namespace DataAccess.EFCore.UnitOfWork
                 if (disposing)
                 {
                     //release managed resources
+                    this.Dispose();// TODO ????
                 }
                 //release unmanaged resources
                 IsDisposed = true;

@@ -1,17 +1,19 @@
 ﻿using DataAccess.EFCore.BaseRepository;
-using DataAccess.EFCore.Extends;
+using DataAccess.MemoryCaching.RepositoryPattern;
+using Microsoft.Extensions.Caching.Memory;
 using Modules.Movies.Core.Entities;
 using Modules.Movies.Infrastructure.Persistence;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Modules.Movies.Infrastructure.Repository
 {
     public class MovieRepository : GenericRepository<Movie, MoviesDbContext>, IMovieRepository
     {
-        public MovieRepository(MoviesDbContext context):base(context) { }
+        private ICachingRepository<Movie, int>? cachingRepository;
+        private readonly IMemoryCache _cache;
+        public ICachingRepository<Movie, int> MovieCachingRepository => cachingRepository ??= new CachingRepository<Movie,int,MoviesDbContext>(_cache, _context);
+        public MovieRepository(MoviesDbContext context, IMemoryCache cache) :base(context) 
+        {
+            _cache = cache;
+        }
     }
 }

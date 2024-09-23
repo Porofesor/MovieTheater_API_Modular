@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DataAccess.EFCore\DataAccess.EFCore.csproj" />
+    <ProjectReference Include="..\MemoryCachingRepositoryPattern\DataAccess.MemoryCaching.csproj" />
     <ProjectReference Include="..\Modules.Movies.Core\Modules.Movies.Core.csproj" />
     <ProjectReference Include="..\Shared.Infrastructure\Shared.Infrastructure.csproj" />
   </ItemGroup>

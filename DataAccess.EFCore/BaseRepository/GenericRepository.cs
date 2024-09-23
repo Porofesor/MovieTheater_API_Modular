@@ -34,7 +34,7 @@ namespace DataAccess.EFCore.BaseRepository
         }
 
         public async Task AddRangeAsync(IEnumerable<T> entities, CancellationToken cancellationToken = default)
-        {
+        { 
             await _dbSet.AddRangeAsync(entities, cancellationToken);
         }
 
@@ -53,24 +53,19 @@ namespace DataAccess.EFCore.BaseRepository
             return await _dbSet.ToListAsync(cancellationToken);
         }
 
-        //public Task<List<T>> GetAllAsync()
-        //{
-        //    return _context.Set<T>().ToListAsync();
-        //}
-
-        public T GetById<TId>(int id) where TId : struct
+        public async Task<TEntity> GetByIdAsync<TEntity, TKey>(TKey id)
+        where TEntity : class, IEntity<TKey>
         {
-            if (typeof(IEntity<TId>).IsAssignableFrom(typeof(T)))
-            {
-                return _context.Set<T>().Find(id);
-            }
-            throw new InvalidOperationException("This entity does not implement IEntity<T>");
+            // Use the Find method to get the entity by ID
+            return await _context.Set<TEntity>().FindAsync(id);
         }
 
-        //public T GetById<TId>(TId id) where TId : IEntity<TId> 
-        //{
-        //    return _context.Set<T>().Find(id);
-        //}
+        public TEntity GetById<TEntity, TKey>(TKey id)
+        where TEntity : class, IEntity<TKey>
+        {
+            // Use the Find method to get the entity by ID
+            return _context.Set<TEntity>().Find(id);
+        }
 
         public void Remove(T entity)
         {
@@ -110,11 +105,12 @@ namespace DataAccess.EFCore.BaseRepository
         #endregion
         // ------------------------------
         #region GetAll NoTracking Async
-        public async Task<IEnumerable<TId>> GetAllByIdWithNoTrackingAsync<TId>(
-        IEnumerable<int> ids,
+        public async Task<IEnumerable<TId>> GetAllByIdWithNoTrackingAsync<TId, TKey>(
+        IEnumerable<TKey> ids,
         CancellationToken cancellationToken = default,
         params Expression<Func<TId, object>>[] includes)
-        where TId : class, IEntity<int>
+        where TId : class, IEntity<TKey>
+        where TKey : struct
         {
             IQueryable<TId> query = _context.Set<TId>().AsNoTracking();
 
@@ -126,11 +122,12 @@ namespace DataAccess.EFCore.BaseRepository
             return await query.Where(e => ids.Contains(e.Id)).ToListAsync(cancellationToken);
         }
 
-        public async Task<IEnumerable<TId>> GetAllByIdWithNoTrackingWhereAsync<TId>(
-        IEnumerable<int> ids,
+        public async Task<IEnumerable<TId>> GetAllByIdWithNoTrackingWhereAsync<TId, TKey>(
+        IEnumerable<TKey> ids,
         CancellationToken cancellationToken = default,
         params Expression<Func<TId, object>>[] includes)
-        where TId : class, IEntity<int>
+        where TId : class, IEntity<TKey>
+            where TKey : struct
         {
             IQueryable<TId> query = _context.Set<TId>().AsNoTracking();
 
@@ -141,11 +138,12 @@ namespace DataAccess.EFCore.BaseRepository
 
             return await query.Where(e => ids.Contains(e.Id)).ToListAsync(cancellationToken);
         }
-        public async Task<TId?> GetByIdWithNoTrackingAsync<TId>(
-        int id,
+        public async Task<TId?> GetByIdWithNoTrackingAsync<TId, TKey>(
+        TKey id,
         CancellationToken cancellationToken = default,
         params Expression<Func<TId, object>>[] includes)
-        where TId : class, IEntity<int>
+        where TId : class, IEntity<TKey>
+        where TKey : struct
         {
             IQueryable<TId> query = _context.Set<TId>().AsNoTracking();
 
@@ -154,7 +152,7 @@ namespace DataAccess.EFCore.BaseRepository
                 query = query.Include(include);
             }
 
-            return await query.FirstOrDefaultAsync(e => e.Id == id, cancellationToken);
+            return await query.FirstOrDefaultAsync(e => e.Id.Equals(id), cancellationToken);
         }
 
         // Examples for predicate:

@@ -9,34 +9,39 @@ namespace DataAccess.EFCore.BaseRepository
         #region Basic methods
         IEnumerable<T> GetAll();
         IEnumerable<T> Find(Expression<Func<T, bool>> expression);
-        T GetById<TId>(int id) where TId : struct;
+        //T GetById<TId>(int id) where TId : struct;
+        TEntity GetById<TEntity, TKey>(TKey id)
+        where TEntity : class, IEntity<TKey>;
         void Add(T entity);
-        void AddAsync(T entity, CancellationToken cancellationToken);
+        Task AddAsync(T entity, CancellationToken cancellationToken);
         void AddRange(IEnumerable<T> entities); 
-        void AddRangeAsync(IEnumerable<T> entities, CancellationToken cancellationToken);
+        Task AddRangeAsync(IEnumerable<T> entities, CancellationToken cancellationToken);
         void Remove(T entity);
         void RemoveRange(IEnumerable<T> entities);
         #endregion
 
         #region GetAll WithNoTracking Async
-        Task<IEnumerable<TId>> GetAllByIdWithNoTrackingAsync<TId>(
-            IEnumerable<int> ids,
+        Task<IEnumerable<TId>> GetAllByIdWithNoTrackingAsync<TId, TKey>(
+            IEnumerable<TKey> ids,
             CancellationToken cancellationToken,
             params Expression<Func<TId, object>>[] includes)
-            where TId : class, IEntity<int>;
-        Task<IEnumerable<TId>> GetAllByIdWithNoTrackingWhereAsync<TId>(
-            IEnumerable<int> ids,
+            where TId : class, IEntity<TKey>
+            where TKey : struct;
+        Task<IEnumerable<TId>> GetAllByIdWithNoTrackingWhereAsync<TId, TKey>(
+            IEnumerable<TKey> ids,
             CancellationToken cancellationToken,
             params Expression<Func<TId, object>>[] includes)
-            where TId : class, IEntity<int>;
-        Task<TId?> GetByIdWithNoTrackingAsync<TId>(
-            int id,
+            where TId : class, IEntity<TKey>
+            where TKey : struct;
+        Task<TId?> GetByIdWithNoTrackingAsync<TId, TKey>(
+            TKey id,
             CancellationToken cancellationToken,
             params Expression<Func<TId, object>>[] includes)
-            where TId : class, IEntity<int>;
+            where TId : class, IEntity<TKey>
+            where TKey : struct;
         Task<IEnumerable<T>> GetAllWithNoTrackingWhereAsync(
-            CancellationToken cancellationToken,
             Expression<Func<T, bool>> predicate,
+            CancellationToken cancellationToken = default,
             params Expression<Func<T, object>>[] includes);
         #endregion
     }
