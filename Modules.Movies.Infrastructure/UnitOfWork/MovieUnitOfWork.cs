@@ -1,5 +1,6 @@
 ﻿using DataAccess.EFCore.UnitOfWork;
 using DataAccess.MemoryCaching.RepositoryPattern;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using Modules.Movies.Core.Entities;
 using Modules.Movies.Infrastructure.Persistence;

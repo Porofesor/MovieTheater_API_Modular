@@ -9,6 +9,7 @@ namespace Swagger.Core.Extensions
         // Dont forget to add a path(properties of individual module) with file name inside "XML documentation file path" /bin/debuf/net6.0/Name_Of_Module.xml  its important
         // You need to add a path inside every module + list it below with: c.IncludeXmlComments ...
 
+        //https://blog.georgekosmidis.net/swagger-in-asp-net-core-tips-and-tricks.html
         // Official version of comment below
 
         // To suppress error/warning 1591 (missing XML comments), go to the main project's properties 

@@ -25,10 +25,10 @@ namespace Modules.Movies.Controllers
             _unitOfWork = unitOfWork;
         }
         /// <summary>
-        /// Get list of all movies
+        ///     Get list of all movies
         /// </summary>
         /// <remarks>
-        /// This endpoint returns a list of all movies in the system.
+        ///     This endpoint returns a list of all movies in the system.
         /// </remarks>
         /// <response code="200">Returns the list of movies</response>
         /// <response code="500">If there is an internal server error</response>
@@ -43,7 +43,8 @@ namespace Modules.Movies.Controllers
         [HttpPost]
         public async Task<IActionResult> RegisterAsync(RegisterMovieModel command)
         {
-            Movie newMovie = new Movie{
+            Movie newMovie = new Movie
+            {
                 CreatedDate = DateTime.Now,
                 Name = command.Name,
                 Description = command.Description,

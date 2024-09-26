@@ -5,13 +5,14 @@ using Modules.Tickets.Extensions;
 using Shared.Infrastructure.Extensions;
 using AutoMapper.Core.Extensions;
 using Swagger.Core.Extensions;
+using System;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+
 
 builder.Services.AddSharedInfrastructure(builder.Configuration);
 
@@ -37,7 +38,7 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger(options =>
     {
-        options.SerializeAsV2 = true;
+        options.SerializeAsV2 = true; //Revert Swagger JSON to version 2.0
     });
     app.UseSwaggerUI(c =>
     {
