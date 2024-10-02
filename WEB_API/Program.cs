@@ -1,11 +1,10 @@
-using Microsoft.OpenApi.Models;
-using Modules.Movies.Extensions;
-using Modules.Movies.Infrastructure.Extensions;
-using Modules.Tickets.Extensions;
-using Shared.Infrastructure.Extensions;
 using AutoMapper.Core.Extensions;
+using Identity.IdentityCore.JWT.Infrastructure.Extensions;
+using Shared.Infrastructure.Extensions;
 using Swagger.Core.Extensions;
-using System;
+using Swagger.Identity.JWT;
+using UserEndPoints;
+using WEB_API.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,11 +16,10 @@ builder.Services.AddControllers();
 builder.Services.AddSharedInfrastructure(builder.Configuration);
 
 // DBs
-builder.Services.AddTicketModule(builder.Configuration);
-builder.Services.AddMoviesModule(builder.Configuration);
+builder.Services.AddDbContextServises(builder.Configuration);
 
 // UoW
-builder.Services.AddMoviesUnitOfWork(builder.Configuration);
+builder.Services.AddUnitOfWorkServices(builder.Configuration);
 
 // Memory caching
 builder.Services.AddMemoryCache();
@@ -31,7 +29,22 @@ builder.Services.AddAutoMapperCore();
 
 // Swagger
 builder.Services.AddSwaggerCore();
+
+// TokenProvider, PassowrdHaser, Authenticatiuon
+builder.Services.AddJWTInfrastructure();
+builder.Services.AddAuthenticationJWT(builder.Configuration);
+builder.Services.AddSwaggerGenWithAuth();
+
+
+
+// Aplication is building
 var app = builder.Build();
+
+// Map your custom user endpoints ()
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapUserEndpoints();
+});
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -49,6 +62,8 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

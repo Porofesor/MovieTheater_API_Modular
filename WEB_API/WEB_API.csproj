@@ -26,15 +26,16 @@
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
-		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
 	</ItemGroup>
 
 	<ItemGroup>
 		<ProjectReference Include="..\AutoMapper.Core\AutoMapper.Core.csproj" />
+		<ProjectReference Include="..\Identity.IdentityCore.JWT.Infrastructure\Identity.IdentityCore.JWT.Infrastructure.csproj" />
 		<ProjectReference Include="..\Modules.Movies.Infrastructure\Modules.Movies.Infrastructure.csproj" />
 		<ProjectReference Include="..\Modules.Movies\Modules.Movies.csproj" />
 		<ProjectReference Include="..\Modules.Tickets\Modules.Tickets.csproj" />
 		<ProjectReference Include="..\Shared.Infrastructure\Shared.Infrastructure.csproj" />
 		<ProjectReference Include="..\Swagger.Core\Swagger.Core.csproj" />
+		<ProjectReference Include="..\Swagger.Identity.JWT\Swagger.Identity.JWT.csproj" />
 	</ItemGroup>
 </Project>
