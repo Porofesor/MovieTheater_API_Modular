@@ -118,7 +118,6 @@ namespace DataAccess.EFCore.BaseRepository
             {
                 query = query.Include(include);
             }
-
             return await query.Where(e => ids.Contains(e.Id)).ToListAsync(cancellationToken);
         }
 

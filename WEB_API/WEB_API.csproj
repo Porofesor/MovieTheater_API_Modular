@@ -5,6 +5,7 @@
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<GenerateDocumentationFile>True</GenerateDocumentationFile>
+		<NoDefaultLaunchSettingsFile>true</NoDefaultLaunchSettingsFile>
 		<DocumentationFile>bin\Debug\net6.0\Swagger.Core.xml</DocumentationFile>
 	</PropertyGroup>
 
@@ -21,6 +22,7 @@
 	</PropertyGroup>
 	
 	<ItemGroup>
+		<PackageReference Include="AspNetCoreRateLimit" Version="5.0.0" />
 		<PackageReference Include="IdentityServer4" Version="4.1.2" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.29">
 			<PrivateAssets>all</PrivateAssets>

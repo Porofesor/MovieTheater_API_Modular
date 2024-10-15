@@ -1,4 +1,5 @@
-﻿using Identity.IdentityCore.JWT.Models;
+﻿using Identity.IdentityCore.JWT.Infrastructure.Infrastructure;
+using Identity.IdentityCore.JWT.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
@@ -12,14 +13,14 @@ namespace UserEndPoints
         public static IEndpointRouteBuilder MapUserEndpoints(this IEndpointRouteBuilder endpoints)
         {
             // Register Account Endpoint
-            endpoints.MapPost("/api/users/RegisterAccountAsync", async (RegisterAccountAsync.Request request, RegisterAccountAsync useCase) =>
+            endpoints.MapPost("/api/users/register", async (RegisterUsers.Request request, RegisterUsers useCase) =>
             {
                 var result = await useCase.Handle(request);
                 return result.Success ? Results.Ok(result) : Results.BadRequest(result.Errors);
             }).WithTags(Tag);
 
             // Login Endpoint
-            endpoints.MapPost("/api/users/Login", async (Login.Request request, Login useCase) =>
+            endpoints.MapPost("/api/users/login", async (LoginUsers.Request request, LoginUsers useCase) =>
             {
                 var result = await useCase.Handle(request);
                 return result.Success ? Results.Ok(result) : Results.BadRequest(result.Errors);

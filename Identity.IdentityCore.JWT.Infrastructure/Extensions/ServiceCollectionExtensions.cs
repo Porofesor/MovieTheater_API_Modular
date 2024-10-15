@@ -58,7 +58,7 @@ namespace Identity.IdentityCore.JWT.Infrastructure.Extensions
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
                 {
-                    options.RequireHttpsMetadata = false;  // Should be true for production
+                    options.RequireHttpsMetadata = false;  // TODO: Should be true for production
                     options.SaveToken = true;
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
@@ -70,6 +70,19 @@ namespace Identity.IdentityCore.JWT.Infrastructure.Extensions
                         ValidAudience = jwtSettingsAudience,
                         ValidateLifetime = true, // Validate token expiration
                         ClockSkew = TimeSpan.Zero // Reduce the allowed clock skew to prevent token abuse
+                    };
+
+                    // Handle JWT token validation failures
+                    options.Events = new JwtBearerEvents
+                    {
+                        OnAuthenticationFailed = context =>
+                        {
+                            if (context.Exception.GetType() == typeof(SecurityTokenExpiredException))
+                            {
+                                context.Response.Headers.Add("Token-Expired", "true");
+                            }
+                            return Task.CompletedTask;
+                        }
                     };
                 });
 
