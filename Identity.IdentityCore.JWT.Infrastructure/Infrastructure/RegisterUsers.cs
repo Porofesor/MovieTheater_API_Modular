@@ -1,6 +1,7 @@
 ﻿using Identity.IdentityCore.JWT.Infrastructure.Persistence;
 using Identity.IdentityCore.JWT.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System.Security.Cryptography;
 
 namespace Identity.IdentityCore.JWT.Infrastructure.Infrastructure
@@ -9,12 +10,14 @@ namespace Identity.IdentityCore.JWT.Infrastructure.Infrastructure
     {
         private readonly UsersDbContext _context;
         private readonly PasswordHasher _passwordHasher;
+        private readonly ILogger<RegisterUsers> _logger;
 
         // Constructor to inject dependencies
-        public RegisterUsers(UsersDbContext context, PasswordHasher passwordHasher)
+        public RegisterUsers(UsersDbContext context, PasswordHasher passwordHasher, ILogger<RegisterUsers> logger)
         {
             _context = context;
             _passwordHasher = passwordHasher;
+            _logger = logger;
         }
 
         // Define the Request record to handle registration data (email, password, etc.)
@@ -43,7 +46,7 @@ namespace Identity.IdentityCore.JWT.Infrastructure.Infrastructure
 
             string passwordHash = _passwordHasher.HashPassword(request.Password);
 
-            string emailVerificationToken = GenerateVerificationToken(); // Generate the verification token
+            //string emailVerificationToken = GenerateVerificationToken(); // Generate the verification token
 
             var user = new User
             {
@@ -51,14 +54,14 @@ namespace Identity.IdentityCore.JWT.Infrastructure.Infrastructure
                 PasswordHash = passwordHash,
                 IsEmailVerified = false, // Initial email verification status is false
                 CreatedAt = DateTime.UtcNow,
-                EmailVerificationToken = emailVerificationToken // Store the verification token
+                EmailVerificationToken = null // Store the verification token
             };
 
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
 
             // Send verification email (email service integration required)
-            await SendVerificationEmail(user.Email, emailVerificationToken);
+            //await SendVerificationEmail(user.Email, emailVerificationToken);
 
             return user;
         }

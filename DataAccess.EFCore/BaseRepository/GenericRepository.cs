@@ -8,7 +8,7 @@ namespace DataAccess.EFCore.BaseRepository
         where T : class
         where CustomDbContext : DbContext
         //where TId : class, IEntity<int>
-        //where TIsDeleted : class, IIsDeleted
+        //where TIsDeleted : class, IDeleted
     {
         protected readonly CustomDbContext _context; //ModuleDbContext
         private readonly DbSet<T> _dbSet;
@@ -69,7 +69,7 @@ namespace DataAccess.EFCore.BaseRepository
 
         public void Remove(T entity)
         {
-            if (entity is IIsDeleted deletable)
+            if (entity is IDeleted deletable)
             {
                 // Soft delete
                 deletable.IsDeleted = true;
@@ -86,7 +86,7 @@ namespace DataAccess.EFCore.BaseRepository
         {
             _context.Set<T>().RemoveRange(entities);
         }
-        private void SoftDelete<T>(IEnumerable<T> entities) where T : class, IIsDeleted
+        private void SoftDelete<T>(IEnumerable<T> entities) where T : class, IDeleted
         {
             foreach (var entity in entities)
             {
@@ -97,8 +97,8 @@ namespace DataAccess.EFCore.BaseRepository
         }
         public void RemoveRange(IEnumerable<T> entities)
         {
-            if (entities is IIsDeleted)
-                SoftDelete(entities.OfType<IIsDeleted>().ToList()); // TODO Had no better idea
+            if (entities is IDeleted)
+                SoftDelete(entities.OfType<IDeleted>().ToList()); // TODO Had no better idea
             else
                 HardDelete(entities);
         }

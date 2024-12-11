@@ -12,13 +12,13 @@ namespace Identity.IdentityCore.JWT.Infrastructure.Extensions
 {
     public static class ServiceCollectionExtensions
     {
-        public static IServiceCollection AddTicketInfrastructure(this IServiceCollection services, IConfiguration config)
+        public static IServiceCollection AddUsersInfrastructure(this IServiceCollection services, IConfiguration config)
         {
             services
                 .AddDatabaseContext<UsersDbContext>(config)
-                .AddScoped<IUsersDbContext>(provider => provider.GetService<UsersDbContext>());
-
-            
+                .AddScoped<IUsersDbContext>(provider => provider.GetService<UsersDbContext>())
+                .AddJWTInfrastructure() 
+                .AddAuthenticationJWT(config); 
             return services;
         }
 

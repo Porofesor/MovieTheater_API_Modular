@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 namespace DataAccess.EFCore.BaseRepository.EntityRepository.Entities
 {
     public abstract class DeletedRepository<T, CustomDbContext>
-        where T : class, IIsDeleted
+        where T : class, IDeleted
         where CustomDbContext : DbContext
     {
         protected readonly CustomDbContext _context; //ModuleDbContext

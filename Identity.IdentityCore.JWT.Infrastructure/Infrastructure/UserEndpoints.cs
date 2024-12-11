@@ -2,6 +2,7 @@
 using Identity.IdentityCore.JWT.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 
 namespace UserEndPoints
@@ -13,32 +14,33 @@ namespace UserEndPoints
         public static IEndpointRouteBuilder MapUserEndpoints(this IEndpointRouteBuilder endpoints)
         {
             // Register Account Endpoint
-            endpoints.MapPost("/api/users/register", async (RegisterUsers.Request request, RegisterUsers useCase) =>
+            endpoints.MapPost("/api/users/register", async (RegisterUsers.Request request, [FromServices]RegisterUsers useCase) =>
             {
+                
                 var result = await useCase.Handle(request);
-                return result.Success ? Results.Ok(result) : Results.BadRequest(result.Errors);
+                return result is null ? Results.Ok(result) : Results.BadRequest();
             }).WithTags(Tag);
 
             // Login Endpoint
             endpoints.MapPost("/api/users/login", async (LoginUsers.Request request, LoginUsers useCase) =>
             {
                 var result = await useCase.Handle(request);
-                return result.Success ? Results.Ok(result) : Results.BadRequest(result.Errors);
+                return result is null ? Results.Ok(result) : Results.BadRequest();
             }).WithTags(Tag);
 
             // Verify Email Endpoint
-            endpoints.MapGet("/api/users/verify-email", async (Guid token, VerifyEmail useCase) =>
-            {
-                bool success = await useCase.Handle(token);
-                return success ? Results.Ok() : Results.BadRequest("Verification token expired.");
-            }).WithTags(Tag).WithName("VerifyEmail");
+            //endpoints.MapGet("/api/users/verify-email", async (Guid token, RegisterUsers.SendVerificationEmail useCase) =>
+            //{
+            //    bool success = await useCase.Handle(token);
+            //    return success ? Results.Ok() : Results.BadRequest("Verification token expired.");
+            //}).WithTags(Tag).WithName("VerifyEmail");
 
             // Get User by ID Endpoint
-            endpoints.MapGet("/api/users/{id:guid}", async (Guid id, GetUser useCase) =>
-            {
-                var user = await useCase.Handle(id);
-                return user is not null ? Results.Ok(user) : Results.NotFound("User not found.");
-            }).WithTags(Tag).RequireAuthorization();
+            //endpoints.MapGet("/api/users/{id:guid}", async (Guid id, GetUser useCase) =>
+            //{
+            //    var user = await useCase.Handle(id);
+            //    return user is not null ? Results.Ok(user) : Results.NotFound("User not found.");
+            //}).WithTags(Tag).RequireAuthorization();
 
             return endpoints;
         }
