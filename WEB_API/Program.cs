@@ -68,11 +68,11 @@ var app = builder.Build();
 
 // Add middleware to the pipeline
 app.UseRouting();  // <-- This must come before app.UseEndpoints()
-// Map your custom user endpoints ()
-app.UseEndpoints(endpoints =>
-{
-    endpoints.MapUserEndpoints();
-});
+// Map your custom user endpoints () TODO : Errors
+//app.UseEndpoints(endpoints =>
+//{
+//    endpoints.MapUserEndpoints();
+//});
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

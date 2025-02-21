@@ -6,7 +6,7 @@ namespace Modules.Movies.Infrastructure.UnitOfWork
 {
     public interface IMovieUnitOfWork 
     {
-        ICachingRepository<Movie, int> MovieCachingRepository { get; }
+        ICachingRepository<Movie> MovieCachingRepository { get; }
         IMovieRepository MovieRepository { get; }
         int Complete();
     }

@@ -34,7 +34,7 @@ namespace DataAccess.EFCore.BaseRepository
         }
 
         public async Task AddRangeAsync(IEnumerable<T> entities, CancellationToken cancellationToken = default)
-        { 
+        {
             await _dbSet.AddRangeAsync(entities, cancellationToken);
         }
 
@@ -161,9 +161,10 @@ namespace DataAccess.EFCore.BaseRepository
         //    m => m.Reviews,
         //    m => m.Title.Contains("Inception")
         // );
-        public async Task<IEnumerable<T>> GetAllWithNoTrackingWhereAsync(
+        public async Task<IEnumerable<T>> GetAllWithNoTrackingWhere(
         Expression<Func<T, bool>> predicate,
         CancellationToken cancellationToken = default,
+        int top = 100,
         params Expression<Func<T, object>>[] includes)
         {
             IQueryable<T> query = _dbSet.AsNoTracking();
@@ -174,6 +175,118 @@ namespace DataAccess.EFCore.BaseRepository
             }
 
             query = query.Where(predicate);
+
+            if (includes.Length >= 3)
+                query = query.AsSplitQuery();
+
+            // Add OrderBy (if necessary) and Take(100)
+            query = query.Take(top); // Fetch the first 100 records
+
+            return await query.ToListAsync(cancellationToken);
+        }
+
+        // God forgive....
+        // Call with ordering by a specific property
+        //var results = await repository.GetAllWithNoTrackingWhereAsync(
+        //    x => x.IsActive,          // Predicate
+        //    x => x.CreatedDate,       // Order by CreatedDate
+        //    ascending: false,         // Descending order
+        //    limit: 50                 // Fetch up to 50 records
+        //);
+        public async Task<IEnumerable<T>> GetAllWithNoTrackingWhere(
+            Expression<Func<T, bool>> predicate,
+            Expression<Func<T, object>> orderBy = null, // OrderBy parameter
+            bool ascending = true,                      // Ascending/Descending flag
+            int top = 100,                              // Limit
+            CancellationToken cancellationToken = default,
+            params Expression<Func<T, object>>[] includes)
+        {
+            IQueryable<T> query = _dbSet.AsNoTracking();
+
+            foreach (var include in includes)
+            {
+                query = query.Include(include);
+            }
+
+            query = query.Where(predicate);
+
+            if (includes.Length >= 3)
+                query = query.AsSplitQuery();
+
+            // Apply ordering if an orderBy expression is provided
+            if (orderBy != null)
+            {
+                query = ascending ? query.OrderBy(orderBy) : query.OrderByDescending(orderBy);
+            }
+
+            // Apply Take to limit the result set
+            query = query.Take(top);
+
+            return await query.ToListAsync(cancellationToken);
+        }
+
+        //TODO 
+        public Task<IEnumerable<T>> GetAllWithNoTrackingWhere(Expression<Func<T, bool>> predicate, CancellationToken cancellationToken = default, params Expression<Func<T, object>>[] includes)
+        {
+            throw new NotImplementedException();
+        }
+        //
+        public async Task<IEnumerable<T>> GetAllNoTrackingWherePagination(
+            Expression<Func<T, bool>> predicate,
+            Expression<Func<T, object>> orderBy = null, // OrderBy parameter
+            bool ascending = true,                      // Ascending/Descending flag
+            int page = 1,                               // Page number
+            int pageSize = 20,                          // Page size
+            CancellationToken cancellationToken = default,
+            params Expression<Func<T, object>>[] includes)
+        {
+            IQueryable<T> query = _dbSet.AsNoTracking();
+
+            foreach (var include in includes)
+            {
+                query = query.Include(include);
+            }
+
+            query = query.Where(predicate);
+
+            if (includes.Length >= 3)
+                query = query.AsSplitQuery();
+
+            // Apply ordering if an orderBy expression is provided
+            if (orderBy != null)
+            {
+                query = ascending ? query.OrderBy(orderBy) : query.OrderByDescending(orderBy);
+            }
+
+            // Calculate the items to skip for pagination
+            int skip = (page - 1) * pageSize;
+
+            // Apply Skip and Take for pagination
+            query = query.Skip(skip).Take(pageSize);
+
+            return await query.ToListAsync(cancellationToken);
+        }
+
+        public async Task<IEnumerable<T>> GetAllNoTrackingPaginationAsync(
+            Expression<Func<T, object>> orderBy = null, // OrderBy parameter
+            bool ascending = true,                      // Ascending/Descending flag
+            int page = 1,                               // Page number
+            int pageSize = 20,                          // Page size
+            CancellationToken cancellationToken = default)
+        {
+            IQueryable<T> query = _dbSet.AsNoTracking();
+
+            // Apply ordering if an orderBy expression is provided
+            if (orderBy != null)
+            {
+                query = ascending ? query.OrderBy(orderBy) : query.OrderByDescending(orderBy);
+            }
+
+            // Calculate the items to skip for pagination
+            int skip = (page - 1) * pageSize;
+
+            // Apply Skip and Take for pagination
+            query = query.Skip(skip).Take(pageSize);
 
             return await query.ToListAsync(cancellationToken);
         }
