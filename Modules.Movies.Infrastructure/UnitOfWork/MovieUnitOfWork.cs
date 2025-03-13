@@ -8,7 +8,7 @@ using Modules.Movies.Infrastructure.Repository;
 
 namespace Modules.Movies.Infrastructure.UnitOfWork
 {
-    public class MovieUnitOfWork : UnitOfWork<MoviesDbContext>,IMovieUnitOfWork,IDisposable
+    public class MovieUnitOfWork : UnitOfWork<MoviesDbContext>,IMovieUnitOfWork, IDisposable
     {
         private readonly MoviesDbContext _context;
         private readonly IMemoryCache _cache;
@@ -20,7 +20,7 @@ namespace Modules.Movies.Infrastructure.UnitOfWork
             MovieRepository = new MovieRepository(context);
         }
         public IMovieRepository MovieRepository { get; set; }
-        private ICachingRepository<Movie, int> cachingRepository { get; set; } //Lazy Loading
-        public ICachingRepository<Movie, int> MovieCachingRepository => cachingRepository ??= new CachingRepository<Movie, int, MoviesDbContext>(_cache, _context);
+        private ICachingRepository<Movie> cachingRepository { get; set; } //Lazy Loading
+        public ICachingRepository<Movie> MovieCachingRepository => cachingRepository ??= new CachingRepository<Movie>(_cache);
     }
 }

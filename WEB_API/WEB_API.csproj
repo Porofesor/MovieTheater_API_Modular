@@ -1,10 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
 	<PropertyGroup>
-		<TargetFramework>net6.0</TargetFramework>
+		<TargetFramework>net8.0</TargetFramework>
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<GenerateDocumentationFile>True</GenerateDocumentationFile>
+		<NoDefaultLaunchSettingsFile>true</NoDefaultLaunchSettingsFile>
 		<DocumentationFile>bin\Debug\net6.0\Swagger.Core.xml</DocumentationFile>
 	</PropertyGroup>
 
@@ -21,20 +22,23 @@
 	</PropertyGroup>
 	
 	<ItemGroup>
+		<PackageReference Include="AspNetCoreRateLimit" Version="5.0.0" />
 		<PackageReference Include="IdentityServer4" Version="4.1.2" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.29">
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.12" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.0">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
-		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
 	</ItemGroup>
 
 	<ItemGroup>
 		<ProjectReference Include="..\AutoMapper.Core\AutoMapper.Core.csproj" />
+		<ProjectReference Include="..\Identity.IdentityCore.JWT.Infrastructure\Identity.IdentityCore.JWT.Infrastructure.csproj" />
 		<ProjectReference Include="..\Modules.Movies.Infrastructure\Modules.Movies.Infrastructure.csproj" />
 		<ProjectReference Include="..\Modules.Movies\Modules.Movies.csproj" />
 		<ProjectReference Include="..\Modules.Tickets\Modules.Tickets.csproj" />
 		<ProjectReference Include="..\Shared.Infrastructure\Shared.Infrastructure.csproj" />
 		<ProjectReference Include="..\Swagger.Core\Swagger.Core.csproj" />
+		<ProjectReference Include="..\Swagger.Identity.JWT\Swagger.Identity.JWT.csproj" />
 	</ItemGroup>
 </Project>

@@ -1,11 +1,13 @@
-using Microsoft.OpenApi.Models;
-using Modules.Movies.Extensions;
-using Modules.Movies.Infrastructure.Extensions;
-using Modules.Tickets.Extensions;
-using Shared.Infrastructure.Extensions;
+using AspNetCoreRateLimit;
 using AutoMapper.Core.Extensions;
+using Identity.IdentityCore.JWT.Infrastructure.Extensions;
+using Microsoft.AspNetCore.ResponseCompression;
+using RateLimitServices;
+using Shared.Infrastructure.Extensions;
 using Swagger.Core.Extensions;
-using System;
+using Swagger.Identity.JWT;
+using UserEndPoints;
+using WEB_API.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,12 +18,11 @@ builder.Services.AddControllers();
 
 builder.Services.AddSharedInfrastructure(builder.Configuration);
 
-// DBs
-builder.Services.AddTicketModule(builder.Configuration);
-builder.Services.AddMoviesModule(builder.Configuration);
+// Modules + (DBs + others)
+builder.Services.AddModuleServises(builder.Configuration);
 
 // UoW
-builder.Services.AddMoviesUnitOfWork(builder.Configuration);
+builder.Services.AddUnitOfWorkServices(builder.Configuration);
 
 // Memory caching
 builder.Services.AddMemoryCache();
@@ -31,7 +32,47 @@ builder.Services.AddAutoMapperCore();
 
 // Swagger
 builder.Services.AddSwaggerCore();
+
+// TokenProvider, PassowrdHaser, Authenticatiuon
+builder.Services.AddJWTInfrastructure();
+builder.Services.AddAuthenticationJWT(builder.Configuration);
+builder.Services.AddSwaggerGenWithAuth();
+
+// Rate Limiter 
+builder.Services.AddRateLimitServisec(builder.Configuration);
+
+// Add response compression services
+// This allows compressing HTTP responses to reduce size and improve load times.
+#region Response caching/compresion
+builder.Services.AddResponseCompression(o =>
+{
+    o.EnableForHttps = true;
+    o.Providers.Add<BrotliCompressionProvider>();
+    o.Providers.Add<GzipCompressionProvider>();
+});
+
+builder.Services.Configure<BrotliCompressionProviderOptions>(o =>
+{
+    o.Level = System.IO.Compression.CompressionLevel.Fastest;
+});
+
+builder.Services.Configure<GzipCompressionProviderOptions>(o =>
+{
+    o.Level = System.IO.Compression.CompressionLevel.Fastest;
+});
+builder.Services.AddResponseCaching();
+#endregion
+
+// Aplication is building
 var app = builder.Build();
+
+// Add middleware to the pipeline
+app.UseRouting();  // <-- This must come before app.UseEndpoints()
+// Map your custom user endpoints () TODO : Errors
+//app.UseEndpoints(endpoints =>
+//{
+//    endpoints.MapUserEndpoints();
+//});
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -49,7 +90,20 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+
+app.UseAuthentication();
 app.UseAuthorization();
+
+// Enable response compression middleware
+// This compresses HTTP responses before they are sent to the client.
+app.UseResponseCompression();
+
+// Enable response caching middleware
+// This caches HTTP responses for subsequent requests
+app.UseResponseCaching();
+
+// Use Rate limiter middleware
+app.UseIpRateLimiting();
 
 app.MapControllers();
 

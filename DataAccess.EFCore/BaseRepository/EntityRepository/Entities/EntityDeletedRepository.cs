@@ -5,7 +5,7 @@ using System.Linq.Expressions;
 namespace DataAccess.EFCore.BaseRepository.EntityRepository.Entities
 {
     public abstract class EntityDeletedRepository<T,TKey, CustomDbContext>
-        where T : class, IIsDeleted, IEntity<TKey>
+        where T : class, IDeleted, IEntity<TKey>
         where CustomDbContext : DbContext
         where TKey : struct
     {
