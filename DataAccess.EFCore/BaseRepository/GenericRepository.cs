@@ -52,7 +52,6 @@ namespace DataAccess.EFCore.BaseRepository
         {
             return await _dbSet.ToListAsync(cancellationToken);
         }
-
         public async Task<TEntity> GetByIdAsync<TEntity, TKey>(TKey id)
         where TEntity : class, IEntity<TKey>
         {

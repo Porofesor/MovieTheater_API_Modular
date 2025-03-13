@@ -11,8 +11,11 @@ namespace DataAccess.EFCore.BaseRepository
         Task<IEnumerable<T>> GetAllAsync(CancellationToken cancellationToken = default);
         IEnumerable<T> Find(Expression<Func<T, bool>> expression);
         //T GetById<TId>(int id) where TId : struct;
-        TEntity GetById<TEntity, TKey>(TKey id)
+        TEntity GetById<TEntity, TKey>(TKey id) // TODO ???
         where TEntity : class, IEntity<TKey>;
+        public Task<TEntity> GetByIdAsync<TEntity, TKey>(TKey id) // TODO ???
+        where TEntity : class, IEntity<TKey>;
+
         void Add(T entity);
         Task AddAsync(T entity, CancellationToken cancellationToken);
         void AddRange(IEnumerable<T> entities); 
