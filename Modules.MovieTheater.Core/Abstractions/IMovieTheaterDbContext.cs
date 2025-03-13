@@ -1,0 +1,22 @@
+﻿using Microsoft.EntityFrameworkCore;
+using Modules.MovieTheater.Core.Entities;
+using System.Collections.Generic;
+
+namespace Modules.MovieTheater.Core.Abstractions
+{
+    public interface IMovieTheaterDbContext
+    {
+        public DbSet<Cinema> Cinema { get; set; }
+        public DbSet<Location> Location { get; set; }
+        public DbSet<CinemaRoom> CinemaRoom { get; set; }
+        public DbSet<Screening> Screening { get; set; }
+        public DbSet<Movie> Movie { get; set; }
+        public DbSet<Seat> Seat {  get; set; }
+        public DbSet<Ticket> Tickets {  get; set; }
+        public DbSet<Reservation> Reservation { get; set; }
+        public DbSet<Payment> Payments { get; set; }
+        public DbSet<PaymentType> PaymentTypes { get; set; }
+        public DbSet<User> Users { get; set; }
+        Task<int> SaveChangesAsync(CancellationToken cancellationToken);
+    }
+}
