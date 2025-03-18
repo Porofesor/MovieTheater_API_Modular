@@ -9,7 +9,9 @@ namespace DataAccess.EFCore.BaseRepository
         #region Basic methods
         IEnumerable<T> GetAll();
         Task<IEnumerable<T>> GetAllAsync(CancellationToken cancellationToken = default);
+        Task<bool> AnyAsync(Expression<Func<T, bool>> expression, CancellationToken cancellationToken = default);
         IEnumerable<T> Find(Expression<Func<T, bool>> expression);
+        Task<IEnumerable<T>> FindAsync(Expression<Func<T, bool>> expression, CancellationToken cancellationToken = default);
         //T GetById<TId>(int id) where TId : struct;
         TEntity GetById<TEntity, TKey>(TKey id) // TODO ???
         where TEntity : class, IEntity<TKey>;

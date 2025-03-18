@@ -1,7 +1,6 @@
 ﻿using DataAccess.EFCore.UnitOfWork;
 using Modules.MovieTheater.Core.Abstractions;
 using Modules.MovieTheater.Core.Abstractions.Repositories;
-using Modules.MovieTheater.Core.Entities;
 using Modules.MovieTheater.Infrastructure.Persistance;
 using Modules.MovieTheater.Infrastructure.Repositories;
 
@@ -14,6 +13,7 @@ namespace Modules.MovieTheater.Infrastructure.UnitOfWork
         {
             _context = context;
         }
+        #region Repositories
         private ICinemaRepository cinemaRepository {  get; set; }
         public ICinemaRepository CinemaRepository => cinemaRepository ??= new CinemaRepository(_context);
 
@@ -45,8 +45,8 @@ namespace Modules.MovieTheater.Infrastructure.UnitOfWork
         public ITicketRepository TicketRepository => ticketRepository ??= new TicketRepository(_context);   
 
         private IUserRepository userRepository { get; set;}
-        public IUserRepository UserRepository => userRepository ??= new UserRepository(_context);   
-
+        public IUserRepository UserRepository => userRepository ??= new UserRepository(_context);
+        #endregion
     }
 
 }

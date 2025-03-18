@@ -23,7 +23,7 @@ namespace Modules.MovieTheater.Infrastructure.Persistance
         public DbSet<PaymentType> PaymentTypes { get; set; }
         public DbSet<User> Users { get; set; }  
         protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
+        { 
             base.OnModelCreating(modelBuilder);
         }
     }

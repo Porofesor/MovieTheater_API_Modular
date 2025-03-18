@@ -15,6 +15,7 @@ namespace Modules.MovieTheater.Core.Abstractions
         ISeatRepository SeatRepository { get; }
         ITicketRepository TicketRepository { get; }
         IUserRepository UserRepository { get; }
+        Task<int> CompleteAsync();
         int Complete();
     }
 }

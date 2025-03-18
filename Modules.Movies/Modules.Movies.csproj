@@ -13,4 +13,8 @@
     <ProjectReference Include="..\Modules.Movies.Infrastructure\Modules.Movies.Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="DTOs\" />
+  </ItemGroup>
+
 </Project>

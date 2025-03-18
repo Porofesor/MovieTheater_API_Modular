@@ -26,7 +26,7 @@ namespace Swagger.Core.Extensions
                 c.SwaggerDoc("v1", new OpenApiInfo
                 {
                     Title = "API",
-                    Version = "v1",
+                    Version = "V2",
                     Description = "API for test purposes",
                     TermsOfService = new Uri("http://example.com/terms"),
                     Contact = new OpenApiContact
@@ -46,7 +46,15 @@ namespace Swagger.Core.Extensions
                 //var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFilename);
 
                 // Include XML comments from the Movies module
-                c.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, "Modules.Movies.xml"));
+                //c.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, "Modules.Movies.xml"));
+                //c.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, "Modules.MovieTheater.xml"));
+                //c.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, "Modules.Tickets.xml"));
+
+                var xmlFiles = Directory.GetFiles(AppContext.BaseDirectory, "*.xml", SearchOption.TopDirectoryOnly);
+                foreach (var xmlFile in xmlFiles)
+                {
+                    c.IncludeXmlComments(xmlFile);
+                }
 
                 // Uncomment and add other modules as needed
                 // c.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, "Modules.Tickets.xml"));

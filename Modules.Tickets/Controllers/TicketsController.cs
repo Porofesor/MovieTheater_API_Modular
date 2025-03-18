@@ -5,6 +5,9 @@ using Modules.Tickets.Core.Queries;
 
 namespace Modules.Tickets.Controllers
 {
+    /// <summary>
+    /// Manages Ticket actions
+    /// </summary>
     [ApiController]
     [Route("/api/tickets/[controller]")]
     public class TicketsController : ControllerBase
@@ -14,6 +17,12 @@ namespace Modules.Tickets.Controllers
         {
             _mediator = mediator;
         }
+        /// <summary>
+        ///     Get list of all Tickets
+        /// </summary>
+        /// <remarks>
+        ///     This endpoint returns a list of all Tickets in the system.
+        /// </remarks>
         [HttpGet]
         public async Task<IActionResult> GetAllAsync()
         {

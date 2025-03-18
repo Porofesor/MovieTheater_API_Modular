@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfApp"
         mc:Ignorable="d" FontSize="20"
-        Title="WPF Demo" Height="450" Width="800">
+        Title="WPF Demo" Height="450" Width="900">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="20"/>
@@ -40,5 +40,32 @@
                 Grid.Column="1" Grid.Row="3"
                 Grid.ColumnSpan="2" Margin="20"
                 Click="submitButton_Click"/>
+        <ComboBox x:Name="myComboBox" Grid.Column="1" Grid.Row="4" 
+                  Grid.ColumnSpan="2" Margin="10">
+            <ComboBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{Binding FullName}"></TextBlock>
+                    </StackPanel>
+                </DataTemplate>
+            </ComboBox.ItemTemplate>
+        </ComboBox>
+
+        <!--<Image Grid.Column="4" Grid.Row="1" Grid.RowSpan="6"
+               Source="C:\Users\cezar\OneDrive\Pictures\sznuk.jpg"></Image>-->
+        
+        <!--<MediaElement Grid.Column="4" Grid.Row="1" Grid.RowSpan="6"
+               Source="C:\Users\cezar\OneDrive\Pictures\sznuk.jpg"
+        -->
+        <ScrollViewer Grid.Column="4" Grid.Row="1" 
+                    Grid.RowSpan="6">
+            <WrapPanel Orientation="Vertical">
+                <Image MaxHeight="200" MaxWidth="200" Source="C:\Users\cezar\OneDrive\Pictures\sznuk.jpg"></Image>
+                <Image MaxHeight="200" MaxWidth="200" Source="C:\Users\cezar\OneDrive\Pictures\sznuk.jpg"></Image>
+                <Image MaxHeight="200" MaxWidth="200" Source="C:\Users\cezar\OneDrive\Pictures\sznuk.jpg"></Image>
+                <Image MaxHeight="200" MaxWidth="200" Source="C:\Users\cezar\OneDrive\Pictures\sznuk.jpg"></Image>
+            </WrapPanel>
+        </ScrollViewer>
+        
     </Grid>
 </Window>

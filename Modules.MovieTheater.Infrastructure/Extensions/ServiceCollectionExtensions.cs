@@ -13,8 +13,13 @@ namespace Modules.MovieTheater.Infrastructure.Extensions
         {
             services
                 .AddDatabaseContext<MovieTheaterDbContext>(config)
-                .AddScoped<IMovieTheaterUnitOfWork,MovieTheaterUnitOfWork>()
                 .AddScoped<IMovieTheaterDbContext>(provider =>  provider.GetService<MovieTheaterDbContext>());
+            return services;
+        }
+
+        public static IServiceCollection AddMoviesTheaterUnitOfWork(this IServiceCollection services, IConfiguration config)
+        {
+            services.AddScoped<IMovieTheaterUnitOfWork, MovieTheaterUnitOfWork>();
             return services;
         }
     }

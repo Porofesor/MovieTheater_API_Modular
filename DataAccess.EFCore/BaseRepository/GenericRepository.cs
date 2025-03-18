@@ -37,10 +37,18 @@ namespace DataAccess.EFCore.BaseRepository
         {
             await _dbSet.AddRangeAsync(entities, cancellationToken);
         }
-
+        public async Task<bool> AnyAsync(Expression<Func<T, bool>> expression, CancellationToken cancellationToken = default)
+        {
+            return await _dbSet.AnyAsync(expression, cancellationToken);
+        }
         public IEnumerable<T> Find(Expression<Func<T, bool>> expression)
         {
             return _dbSet.Where(expression).ToList();
+        }
+
+        public async Task<IEnumerable<T>> FindAsync(Expression<Func<T, bool>> expression, CancellationToken cancellationToken = default)
+        {
+            return await _dbSet.Where(expression).ToListAsync(cancellationToken);
         }
 
         public IEnumerable<T> GetAll()

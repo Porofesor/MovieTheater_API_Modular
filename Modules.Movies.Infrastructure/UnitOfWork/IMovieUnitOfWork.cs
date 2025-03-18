@@ -8,6 +8,7 @@ namespace Modules.Movies.Infrastructure.UnitOfWork
     {
         ICachingRepository<Movie> MovieCachingRepository { get; }
         IMovieRepository MovieRepository { get; }
+        Task<int> CompleteAsync();
         int Complete();
     }
 }

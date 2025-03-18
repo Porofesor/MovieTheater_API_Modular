@@ -5,5 +5,6 @@
         //IDeveloperRepository Developers { get; }
         //IProjectRepository Projects { get; }
         int Complete();
+        Task<int> CompleteAsync();
     }
 }

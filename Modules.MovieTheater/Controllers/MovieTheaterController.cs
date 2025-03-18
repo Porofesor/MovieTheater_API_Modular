@@ -12,6 +12,5 @@ namespace Modules.MovieTheater.Controllers
         {
             _mediator = mediator;
         }
-
     }
 }

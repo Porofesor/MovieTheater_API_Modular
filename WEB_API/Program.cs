@@ -19,7 +19,7 @@ builder.Services.AddControllers();
 builder.Services.AddSharedInfrastructure(builder.Configuration);
 
 // Modules + (DBs + others)
-builder.Services.AddModuleServises(builder.Configuration);
+builder.Services.AddModuleServices(builder.Configuration);
 
 // UoW
 builder.Services.AddUnitOfWorkServices(builder.Configuration);
